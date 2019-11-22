@@ -1,0 +1,149 @@
+package classlabgui2;
+import java.text.DecimalFormat;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
+
+public class classlabgui2 extends Application{
+@Override
+public void start(Stage primaryStage){
+	GridPane grid= new GridPane();
+	grid.setAlignment(Pos.TOP_CENTER);
+
+	grid.setPadding(new Insets(25, 25, 25, 25));
+
+	grid.setHgap(10);
+
+	grid.setVgap(10);
+
+	Scene scene = new Scene(grid, 350, 375);
+
+    primaryStage.setTitle("Split Bill Calculator");
+    
+    //bill
+    
+     grid.add(new Label("Check Amount: "), 0, 0);
+
+		TextField bill = new TextField();
+
+		grid.add(bill, 1, 0);
+                
+                //sales tax
+      grid.add(new Label("Sales Tax: "), 0, 2);
+
+		TextField salesTax = new TextField();
+
+		grid.add(salesTax, 1, 2);
+                
+                //tip percent
+                 grid.add(new Label("Tip Percent: "), 0, 4);
+                   Integer tips[]={5, 10, 15, 20};
+                 ComboBox comboB = new ComboBox(FXCollections.observableArrayList(tips));
+                 grid.add(comboB, 1, 4);
+//               
+                 
+             //split   
+                
+          grid.add(new Label("Split: "), 0, 6);
+
+	Spinner <Integer> split = new Spinner <>();
+        int initialV = 1;
+        SpinnerValueFactory<Integer> valF= new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 6, initialV);
+        split.setValueFactory(valF);
+        	grid.add(split, 1, 6);   
+              
+                               //total textbox
+                 grid.add(new Label("Total: "), 0, 12);
+
+		TextField total = new TextField();
+
+		grid.add(total, 1, 12);
+                
+                //amt per person
+                    grid.add(new Label("Amount Per Person: "), 0, 14);
+
+		TextField app = new TextField();
+
+		grid.add(app, 1, 14);
+                //calculate button
+       Button calculate = new Button();
+
+    calculate.setText("Calculate");
+    HBox buttonBox = new HBox(15);
+
+		buttonBox.getChildren().add(calculate);
+ 
+		grid.add(buttonBox, 0, 8, 2, 1);
+    calculate.setOnAction(eventonclick -> {
+        double b = Double.valueOf(bill.getText());
+//        double s = Double.valueOf(split.getText());
+        double st = ((Double.valueOf(salesTax.getText())/100)+1);
+        double getTip = new Double(comboB.getValue().toString());
+        double changedTip = (getTip)/100.0;
+//        double calc = ((b*st)/s);
+        double total1 = ((b*st)+changedTip);
+        int gotSplit = valF.getValue();
+        double test = new Double(gotSplit);
+        double apperson = (total1/test);
+        
+//         DecimalFormat df = new DecimalFormat();
+//          df.setMaximumFractionDigits(2);
+//          
+//        if(s%1==0){ 
+//        myOutput.setText("The amount split between " + (int) Math.floor(s) + " people is " + df.format(calc1));
+//        }
+//        
+//        else myOutput.setText("Split can not have decimals");
+        total.setText(Double.toString(total1));
+        app.setText(Double.toString(apperson));
+
+    });  
+    
+
+    
+    //clear button
+       Button clear = new Button();
+
+    clear.setText("Clear");
+
+    clear.setOnAction(event -> {
+        bill.setText("");
+        salesTax.setText("");
+//        split.setText("");
+});
+    buttonBox.getChildren().add(clear);
+    
+    //exit button
+       Button exit = new Button();
+
+    exit.setText("Exit");
+
+    exit.setOnAction(event -> {
+        System.exit(1);
+    });
+                buttonBox.getChildren().add(exit);
+
+                
+                //final
+                 primaryStage.setScene(scene);
+
+    primaryStage.show();
+}
+	
+	public static void main(String[] args){
+		launch(args);
+                
+	}
+}
